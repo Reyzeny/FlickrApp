@@ -1,0 +1,89 @@
+apply plugin: 'com.android.application'
+
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+def propertiesFile = file('key.properties')
+Properties properties = new Properties()
+if (propertiesFile.canRead()) {
+    properties.load(new FileInputStream(propertiesFile))
+}
+def api_key = properties['api_key']
+
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.1"
+    defaultConfig {
+        applicationId "com.reyzeny.br"
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_KEY", api_key
+            buildConfigField "String", "BASE_URL", API_URL
+        }
+        debug {
+            minifyEnabled false
+            buildConfigField "String", "API_KEY", api_key
+            buildConfigField "String", "BASE_URL", API_URL
+        }
+    }
+
+    productFlavors {
+
+    }
+
+}
+
+dependencies {
+    //Kotlin
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.1.0'
+
+    // RxJava 2
+    implementation "io.reactivex.rxjava2:rxjava:$rx_java_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rx_android_version"
+
+    //Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$retrofit_kotlin_coroutines_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_gson_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_rxjava_adapter"
+
+
+    //Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion"
+
+
+    //ViewModel and LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+
+    //Picasso Library
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //Testing
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'com.squareup.retrofit2:retrofit-mock:2.6.1'
+    androidTestImplementation 'com.squareup.okhttp:mockwebserver:2.7.0'
+
+
+    // Default dependencies (appcompat, constraint layout, material design)
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0'
+}
